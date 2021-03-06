@@ -1,7 +1,10 @@
 package com.example.androiddevchallenge
 
-import android.os.*
-import androidx.lifecycle.*
+import android.os.CountDownTimer
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+
 
 class TimerViewModel : ViewModel() {
     private val _timer = MutableLiveData("")
@@ -22,11 +25,11 @@ class TimerViewModel : ViewModel() {
         currentTimer?.cancel()
         currentTimer = object : CountDownTimer(millis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                  _timer.value = "${(millisUntilFinished)/ 1000}"
+                _timer.value = "${(millisUntilFinished) / 1000}"
             }
 
             override fun onFinish() {
-                  _timer.value = "It's over."
+                _timer.value = "It's over."
             }
         }.start()
     }
