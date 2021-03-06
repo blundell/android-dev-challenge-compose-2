@@ -15,15 +15,22 @@
  */
 package com.example.androiddevchallenge
 
-import android.os.Bundle
+import android.os.*
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.*
+import androidx.lifecycle.viewmodel.compose.*
 import com.example.androiddevchallenge.ui.theme.MyTheme
+
+// 3.. 2.. 1.. Lift off! Create a single screen working countdown timer
+// and learn all about state in Compose.
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,11 +43,40 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-// Start building your app here!
 @Composable
-fun MyApp() {
+fun MyApp(timerViewModel: TimerViewModel = viewModel()) {
+    val timeLeft: String by timerViewModel.timer.observeAsState("Ready")
+    val timeSelected: String by timerViewModel.timeSelected.observeAsState("")
     Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = timeSelected, modifier = Modifier.align(Alignment.CenterHorizontally))
+            Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                TimeSelectionButton(timerViewModel, "5 Seconds", 5000)
+                TimeSelectionButton(timerViewModel, "30 Seconds", 30000)
+                TimeSelectionButton(timerViewModel, "1 Minute", 60000)
+            }
+            Button(onClick = {timerViewModel.startTimer()},
+                colors = ButtonDefaults.textButtonColors(backgroundColor = Color.LightGray),
+                modifier = Modifier.padding(8.dp)) {
+                Text(text = "Start")
+            }
+            Text(text = timeLeft,
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(24.dp),
+                fontSize = 90.sp)
+        }
+    }
+}
+
+@Composable
+private fun TimeSelectionButton(timerViewModel: TimerViewModel, label: String, timeInMillis: Long) {
+    Button(
+        onClick = { timerViewModel.setTimerInMillis(timeInMillis) },
+        colors = ButtonDefaults.textButtonColors(
+            backgroundColor = Color.LightGray
+        ),
+        modifier = Modifier.padding(8.dp)
+    ) {
+        Text(text = label)
     }
 }
 
