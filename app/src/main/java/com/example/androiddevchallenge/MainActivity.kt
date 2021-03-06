@@ -65,14 +65,18 @@ fun MyApp(timerViewModel: TimerViewModel = viewModel()) {
                 TimeSelectionButton(timerViewModel, "30 Seconds", 30000)
                 TimeSelectionButton(timerViewModel, "1 Minute", 60000)
             }
-            Button(onClick = {timerViewModel.startTimer()},
+            Button(
+                onClick = { timerViewModel.startTimer() },
                 colors = ButtonDefaults.textButtonColors(backgroundColor = Color.LightGray),
-                modifier = Modifier.padding(8.dp)) {
+                modifier = Modifier.padding(8.dp)
+            ) {
                 Text(text = "Start")
             }
-            Text(text = timeLeft,
+            Text(
+                text = timeLeft,
                 modifier = Modifier.align(Alignment.CenterHorizontally).padding(24.dp),
-                fontSize = 90.sp)
+                fontSize = 90.sp
+            )
         }
     }
 }
